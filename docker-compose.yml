@@ -1,0 +1,30 @@
+version:"3"
+
+volumes:
+  postgre-volume: {}
+
+services:
+  db_postgre:
+    image: postgres
+    volumes:
+      - drf-sample-postgre:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=drfDB
+      - POSTGRES_USER=drfUser
+      - POSTGRES_PASSWORD=drf
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8
+    
+    drf_back:
+      build:
+        context:
+        dockerfile: ./Dockerfile
+      environment: 
+        - DJANGO_DB_HOST=db_postgre
+        - DJANGO_DB_NAME=drfDB
+        - DJANGO_DB_USERNAME=drfUser
+        - DJANGO_DB_PASSWORD=drf
+      ports:
+        - 8000:8000
+      volumes:
+        - ./:/app/
+        
